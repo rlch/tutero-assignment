@@ -2,7 +2,7 @@ package main
 
 import "flag"
 
-func Init() {
+func InitFlags() {
 	flag.Parse()
 }
 

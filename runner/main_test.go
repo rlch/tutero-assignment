@@ -137,53 +137,11 @@ func TestRunner(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			assert := assert.New(t)
-			output, err := runBinary(ctx, tc.caseFile)
+			result, err := runBinary(ctx, tc.caseFile)
 			if err != nil {
 				t.Fatal(err)
 			}
-			assert.Equal(tc.output, output)
+			assert.Equal(tc.output, result.output)
 		})
 	}
-}
-
-func getReusableContainer(b *testing.B, ctx context.Context, caseName string, containerName string) testcontainers.Container {
-	request := testcontainers.ContainerRequest{
-		Name: containerName,
-		FromDockerfile: testcontainers.FromDockerfile{
-			Context:       *DockerContext,
-			Dockerfile:    *Dockerfile,
-			PrintBuildLog: true,
-		},
-		Files: []testcontainers.ContainerFile{
-			{
-				HostFilePath:      fmt.Sprintf("cases/%s.txt", caseName),
-				ContainerFilePath: "/usr/src/app/input.txt",
-				FileMode:          0444,
-			},
-		},
-		WaitingFor: wait.ForExit().WithExitTimeout(time.Minute * 2),
-	}
-	req := testcontainers.GenericContainerRequest{
-		ContainerRequest: request,
-		Started:          true,
-		Reuse:            true,
-	}
-	container, err := testcontainers.GenericContainer(ctx, req)
-	if err != nil {
-		b.Fatalf("unable to start container: %s", err)
-	}
-	return container
-}
-
-func BenchmarkRunner(b *testing.B) {
-	ctx := context.Background()
-	b.RunParallel(func(p *testing.PB) {
-		for p.Next() {
-			state, err := runBinary(ctx, "few_edges_and_progress")
-			if err != nil {
-				b.Fatal(err)
-			}
-			fmt.Println(state.FinishedAt, state.StartedAt)
-		}
-	})
 }
