@@ -92,7 +92,7 @@ func TestRunner(t *testing.T) {
 		{
 			name:     "Multiple leaf nodes having same level",
 			caseFile: "multiple_leaf_node_in_same_layer",
-			output:   []string{"B", "C", "A", "D"},
+			output:   []string{"A", "B", "C", "D"},
 		},
 		{
 			name:     "Multiple roots at same level",
