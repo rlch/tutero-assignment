@@ -1,0 +1,79 @@
+type Circuit {
+  id: ID!
+  title: String!
+  nodes: [Node!]!
+  edges: [Edge!]!
+}
+
+interface Node {
+  id: ID!
+}
+
+type InputNode implements Node {
+  id: ID!
+  title: String
+}
+
+type OutputNode implements Node {
+  id: ID!
+  title: String
+}
+
+type AndNode implements Node {
+  id: ID!
+}
+
+type OrNode implements Node {
+  id: ID!
+}
+
+type NotNode implements Node {
+  id: ID!
+}
+
+type CircuitNode implements Node {
+  id: ID!
+  circuit: Circuit!
+}
+
+type Edge {
+  id: ID!
+  sourceNodeID: ID!
+  targetNodeID: ID!
+}
+
+type EvaluationResult {
+  success: Boolean!
+  outputs: [NodeOutput!]!
+  error: String
+}
+
+type NodeOutput {
+  nodeID: ID!
+  value: Boolean!
+}
+
+input InputNodeValue {
+  nodeID: ID!
+  value: Boolean!
+}
+
+type Query {
+  circuits: [Circuit!]!
+  circuit(id: ID!): Circuit
+  evaluateCircuit(circuitID: ID!, inputs: [InputNodeValue!]!): EvaluationResult!
+}
+
+type Mutation {
+  createCircuit(title: String!): Circuit!
+  createInputNode(circuitID: ID!, title: String): InputNode!
+  createOutputNode(circuitID: ID!, title: String): OutputNode!
+  createAndNode(circuitID: ID!): AndNode!
+  createOrNode(circuitID: ID!): OrNode!
+  createNotNode(circuitID: ID!): NotNode!
+  createCircuitNode(
+    circuitID: ID!
+    referencedCircuitID: ID!
+  ): CircuitNode!
+  createEdge(circuitID: ID!, sourceNodeID: ID!, targetNodeID: ID!): Edge!
+}
