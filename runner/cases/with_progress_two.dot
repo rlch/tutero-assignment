@@ -1,5 +1,5 @@
 
-strict graph with_progress_two {
+strict digraph with_progress_two {
 
 	// Node definitions.
 
@@ -18,14 +18,14 @@ strict graph with_progress_two {
 
 	// Edge definitions.
 
-	"A(5.00)" -- "C(3.00)";
+	"A(5.00)" -> "C(3.00)";
 
-	"B(2.00)" -- "D(4.00)";
+	"B(2.00)" -> "D(4.00)";
 
-	"C(3.00)" -- "D(4.00)";
+	"C(3.00)" -> "D(4.00)";
 
-	"D(4.00)" -- "E(1.00)";
+	"D(4.00)" -> "E(1.00)";
 
-	"E(1.00)" -- "F(6.00)";
+	"E(1.00)" -> "F(6.00)";
 
 }

@@ -1,5 +1,5 @@
 
-strict graph multiple_root_at_same_level {
+strict digraph multiple_root_at_same_level {
 
 	// Node definitions.
 
@@ -14,10 +14,10 @@ strict graph multiple_root_at_same_level {
 
 	// Edge definitions.
 
-	"A(0.70)" -- "D(0.00)";
+	"A(0.70)" -> "D(0.00)";
 
-	"B(0.60)" -- "D(0.00)";
+	"B(0.60)" -> "D(0.00)";
 
-	"C(0.50)" -- "D(0.00)";
+	"C(0.50)" -> "D(0.00)";
 
 }

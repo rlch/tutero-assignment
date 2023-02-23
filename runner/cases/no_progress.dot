@@ -1,5 +1,5 @@
 
-strict graph no_progress {
+strict digraph no_progress {
 
 	// Node definitions.
 
@@ -14,10 +14,10 @@ strict graph no_progress {
 
 	// Edge definitions.
 
-	"A(0.00)" -- "B(0.00)";
+	"A(0.00)" -> "B(0.00)";
 
-	"B(0.00)" -- "C(0.00)";
+	"B(0.00)" -> "C(0.00)";
 
-	"C(0.00)" -- "D(0.00)";
+	"C(0.00)" -> "D(0.00)";
 
 }

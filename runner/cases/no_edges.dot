@@ -1,5 +1,5 @@
 
-strict graph no_edges {
+strict digraph no_edges {
 
 	// Node definitions.
 

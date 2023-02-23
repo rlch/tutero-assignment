@@ -1,5 +1,5 @@
 
-strict graph multiple_intermediate_nodes_at_same_level {
+strict digraph multiple_intermediate_nodes_at_same_level {
 
 	// Node definitions.
 
@@ -16,12 +16,12 @@ strict graph multiple_intermediate_nodes_at_same_level {
 
 	// Edge definitions.
 
-	"A(0.00)" -- "D(0.30)";
+	"A(0.00)" -> "D(0.30)";
 
-	"B(0.50)" -- "E(0.00)";
+	"B(0.50)" -> "E(0.00)";
 
-	"C(0.40)" -- "E(0.00)";
+	"C(0.40)" -> "E(0.00)";
 
-	"D(0.30)" -- "E(0.00)";
+	"D(0.30)" -> "E(0.00)";
 
 }

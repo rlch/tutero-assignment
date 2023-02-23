@@ -1,5 +1,5 @@
 
-strict graph multiple_leaf_node_in_same_layer {
+strict digraph multiple_leaf_node_in_same_layer {
 
 	// Node definitions.
 
@@ -14,6 +14,6 @@ strict graph multiple_leaf_node_in_same_layer {
 
 	// Edge definitions.
 
-	"A(0.00)" -- "D(0.30)";
+	"A(0.00)" -> "D(0.30)";
 
 }
