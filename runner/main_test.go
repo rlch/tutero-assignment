@@ -8,13 +8,14 @@ import (
 	"testing"
 	"time"
 
+	"github.com/docker/docker/api/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
-func runBinary(t *testing.T, ctx context.Context, caseName string) []string {
-	request := testcontainers.ContainerRequest{
+func containerRequest(caseName string) testcontainers.ContainerRequest {
+	return testcontainers.ContainerRequest{
 		FromDockerfile: testcontainers.FromDockerfile{
 			Context:       *DockerContext,
 			Dockerfile:    *Dockerfile,
@@ -29,26 +30,34 @@ func runBinary(t *testing.T, ctx context.Context, caseName string) []string {
 		},
 		WaitingFor: wait.ForExit().WithExitTimeout(time.Minute * 2),
 	}
+}
+
+type runOutput struct {
+	output []string
+	types.ContainerState
+}
+
+func runBinary(ctx context.Context, caseName string) (_ *runOutput, err error) {
 	req := testcontainers.GenericContainerRequest{
-		ContainerRequest: request,
+		ContainerRequest: containerRequest(caseName),
 		Started:          true,
 	}
-	container, err := testcontainers.GenericContainer(ctx, req)
+	var container testcontainers.Container
+	container, err = testcontainers.GenericContainer(ctx, req)
 	if err != nil {
-		t.Fatalf("unable to start container: %s", err)
+		return nil, fmt.Errorf("unable to start container: %s", err)
 	}
 	containerLogs, err := container.Logs(ctx)
 	if err != nil {
-		t.Fatal(err)
+		return nil, err
 	}
 	c, err := io.ReadAll(containerLogs)
 	if err != nil {
-		t.Fatal(err)
+		return nil, (err)
 	}
-
 	defer func() {
-		if err = container.Terminate(ctx); err != nil {
-			t.Errorf("failed to terminate container: %s", err)
+		if cErr := container.Terminate(ctx); cErr != nil {
+			err = cErr
 		}
 	}()
 
@@ -57,7 +66,15 @@ func runBinary(t *testing.T, ctx context.Context, caseName string) []string {
 	for _, node := range strings.Split(rawOutput, "\n") {
 		output = append(output, strings.TrimSpace(node))
 	}
-	return output
+
+	state, err := container.State(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &runOutput{
+		output:         output,
+		ContainerState: *state,
+	}, nil
 }
 
 func TestRunner(t *testing.T) {
@@ -82,7 +99,7 @@ func TestRunner(t *testing.T) {
 		{
 			name:     "Some nodes with progress",
 			caseFile: "with_progress",
-			output:   []string{"A", "E", "B", "C", "D"}, // fix
+			output:   []string{"A", "E", "B", "C", "D"},
 		},
 		{
 			name:     "All nodes with progress",
@@ -120,7 +137,10 @@ func TestRunner(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			assert := assert.New(t)
-			output := runBinary(t, ctx, tc.caseFile)
+			output, err := runBinary(ctx, tc.caseFile)
+			if err != nil {
+				t.Fatal(err)
+			}
 			assert.Equal(tc.output, output)
 		})
 	}
@@ -157,15 +177,13 @@ func getReusableContainer(b *testing.B, ctx context.Context, caseName string, co
 
 func BenchmarkRunner(b *testing.B) {
 	ctx := context.Background()
-	caseName := "with_progress"
-	containerName := "reuseable_container"
-	container := getReusableContainer(b, ctx, caseName, containerName)
-	for i := 0; i < b.N; i++ {
-		container.Exec(ctx, []string{"app"})
-	}
-	defer func() {
-		if err := container.Terminate(ctx); err != nil {
-			b.Errorf("failed to terminate container: %s", err)
+	b.RunParallel(func(p *testing.PB) {
+		for p.Next() {
+			state, err := runBinary(ctx, "few_edges_and_progress")
+			if err != nil {
+				b.Fatal(err)
+			}
+			fmt.Println(state.FinishedAt, state.StartedAt)
 		}
-	}()
+	})
 }
