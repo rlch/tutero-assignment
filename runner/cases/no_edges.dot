@@ -1,0 +1,12 @@
+
+strict graph no_edges {
+
+	// Node definitions.
+
+	"A(0.10)";
+
+	"B(0.20)";
+
+	"C(0.30)";
+
+}

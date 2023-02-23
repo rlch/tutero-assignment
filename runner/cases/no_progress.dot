@@ -1,0 +1,23 @@
+
+strict graph no_progress {
+
+	// Node definitions.
+
+	"A(0.00)";
+
+	"B(0.00)";
+
+	"C(0.00)";
+
+	"D(0.00)";
+
+
+	// Edge definitions.
+
+	"A(0.00)" -- "B(0.00)";
+
+	"B(0.00)" -- "C(0.00)";
+
+	"C(0.00)" -- "D(0.00)";
+
+}

@@ -1,0 +1,27 @@
+
+strict graph few_edges_and_progress {
+
+	// Node definitions.
+
+	"A(0.80)";
+
+	"B(0.00)";
+
+	"C(0.00)";
+
+	"D(0.00)";
+
+	"E(0.70)";
+
+	"F(0.60)";
+
+
+	// Edge definitions.
+
+	"A(0.80)" -- "B(0.00)";
+
+	"B(0.00)" -- "C(0.00)";
+
+	"C(0.00)" -- "D(0.00)";
+
+}
