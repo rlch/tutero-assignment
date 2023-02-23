@@ -1,0 +1,21 @@
+
+strict graph intermittent_edge_and_progress {
+
+	// Node definitions.
+
+	"A(0.60)";
+
+	"B(0.10)";
+
+	"C(0.20)";
+
+	"D(0.80)";
+
+
+	// Edge definitions.
+
+	"A(0.60)" -- "C(0.20)";
+
+	"B(0.10)" -- "D(0.80)";
+
+}

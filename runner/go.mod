@@ -3,9 +3,9 @@ module runner
 go 1.19
 
 require (
-	github.com/sanity-io/litter v1.5.5
 	github.com/stretchr/testify v1.8.1
 	github.com/testcontainers/testcontainers-go v0.18.0
+	gonum.org/v1/gonum v0.12.0
 )
 
 require (

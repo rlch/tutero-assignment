@@ -1,0 +1,19 @@
+
+strict graph multiple_leaf_node_in_same_layer {
+
+	// Node definitions.
+
+	"A(0.00)";
+
+	"B(0.50)";
+
+	"C(0.40)";
+
+	"D(0.30)";
+
+
+	// Edge definitions.
+
+	"A(0.00)" -- "D(0.30)";
+
+}

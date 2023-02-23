@@ -10,3 +10,4 @@ tmp/
 *.test
 *.out
 *.code-workspace
+generate_dotviz.go
