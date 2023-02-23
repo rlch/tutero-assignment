@@ -21,7 +21,7 @@ stateDiagram-v2
     B(0.8) --> C
     C --> E(0.2)
     D(0.5) --> E(0.2)
-		D(0.5) --> F(0.3)
+    D(0.5) --> F(0.3)
 ```
 
 As `A`, `B` and `D` are all root-nodes with no pre-requisites, they are interchangeable in the roadmap.
@@ -95,14 +95,16 @@ C
 ---
 
 ## Submission
-
+- Create a template from this repository
 - Version control your assignment on **GitHub**
 - Give access to [@rlch](https://github.com/rlch)
 - You should send the link to your repository and how much time you took to complete the assignment: sonny@tutero.com.au, richard@tutero.com.au
+- Submissions that cannot be run by invoking `docker build -t assignment . && docker run assignment` (given an `input.txt` in the same `/usr/src/app` directory) will not be considered
 
 ---
 
 ## Tips + Notes
 
+- Use the provided test-runner at `runner/` to verify and benchmark your submission.
 - Try your best to use your initiative, but if you have any issues please contact [richard@tutero.com.au](mailto:richard@tutero.com.au)
 - We will set up a final interview with you after your assignment is complete to go over your code and ask you various questions about your assignment.
