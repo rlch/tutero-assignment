@@ -107,4 +107,4 @@ C
 
 - Use the provided test-runner at `runner/` to verify and benchmark your submission.
 - Try your best to use your initiative, but if you have any issues please contact [richard@tutero.com.au](mailto:richard@tutero.com.au)
-- We will set up a final interview with you after your assignment is complete to go over your code and ask you various questions about your assignment.
+- We will set up an interview with you after your assignment is complete to go over your code and ask you various questions about your assignment.
