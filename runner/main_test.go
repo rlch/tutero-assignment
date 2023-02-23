@@ -3,26 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
+	"strings"
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/wait"
 )
 
-var (
-	caseSimple string = "simple"
-)
-
-type logConsumer []byte
-
-func (l *logConsumer) Accept(log testcontainers.Log) {
-	fmt.Println(log)
-	if log.LogType == testcontainers.StdoutLog {
-		*l = append(*l, log.Content...)
-	}
-}
-
-func runBinary(t *testing.T, ctx context.Context, caseName string) string {
+func runBinary(t *testing.T, ctx context.Context, caseName string) []string {
 	request := testcontainers.ContainerRequest{
 		FromDockerfile: testcontainers.FromDockerfile{
 			Context:       *DockerContext,
@@ -36,7 +27,7 @@ func runBinary(t *testing.T, ctx context.Context, caseName string) string {
 				FileMode:          0444,
 			},
 		},
-		// WaitingFor: wait.ForExit().WithExitTimeout(time.Minute * 2),
+		WaitingFor: wait.ForExit().WithExitTimeout(time.Minute * 2),
 	}
 	req := testcontainers.GenericContainerRequest{
 		ContainerRequest: request,
@@ -46,56 +37,135 @@ func runBinary(t *testing.T, ctx context.Context, caseName string) string {
 	if err != nil {
 		t.Fatalf("unable to start container: %s", err)
 	}
+	containerLogs, err := container.Logs(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	c, err := io.ReadAll(containerLogs)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	defer func() {
 		if err = container.Terminate(ctx); err != nil {
 			t.Errorf("failed to terminate container: %s", err)
 		}
 	}()
 
-	c := logConsumer{}
-	if err = container.StartLogProducer(ctx); err != nil {
-		t.Fatal(err)
+	output := []string{}
+	rawOutput := strings.TrimSpace(string(c))
+	for _, node := range strings.Split(rawOutput, "\n") {
+		output = append(output, strings.TrimSpace(node))
 	}
-	container.FollowOutput(&c)
-	for {
-		time.Sleep(time.Millisecond * 20)
-		if running := container.IsRunning(); running {
-			break
-		}
-	}
-	defer func() {
-		if err = container.StopLogProducer(); err != nil {
-			t.Fatal(err)
-		}
-	}()
-	return string(c)
+	return output
 }
 
 func TestRunner(t *testing.T) {
 	ctx := context.Background()
 	t.Parallel()
-	t.Log(*DockerContext, *Dockerfile)
 
 	testCases := []struct {
 		name     string
 		caseFile string
+		output   []string
 	}{
 		{
-			name:     "...",
-			caseFile: caseSimple,
+			name:     "Only edges",
+			caseFile: "no_progress",
+			output:   []string{"A", "B", "C", "D"},
+		},
+		{
+			name:     "Only progress",
+			caseFile: "no_edges",
+			output:   []string{"C", "B", "A"},
+		},
+		{
+			name:     "Some nodes with progress",
+			caseFile: "with_progress",
+			output:   []string{"A", "E", "B", "C", "D"},
+		},
+		{
+			name:     "All nodes with progress",
+			caseFile: "with_progress_two",
+			output:   []string{"A", "C", "B", "D", "E", "F"},
+		},
+		{
+			name:     "Multiple leaf nodes having same level",
+			caseFile: "multiple_leaf_node_in_same_layer",
+			output:   []string{"A", "B", "C", "D"},
+		},
+		{
+			name:     "Multiple roots at same level",
+			caseFile: "multiple_root_at_same_level",
+			output:   []string{"A", "B", "C", "D"},
+		},
+		{
+			name:     "Multiple intermediate nodes at same level",
+			caseFile: "multiple_intermediate_nodes_at_same_level",
+			output:   []string{"A", "B", "C", "D", "E"},
+		},
+		{
+			name:     "Intermittent edge and progress",
+			caseFile: "intermittent_edge_and_progress",
+			output:   []string{"A", "C", "B", "D"},
+		},
+		{
+			name:     "Few edges and few nodes with only progress",
+			caseFile: "few_edges_and_progress",
+			output:   []string{"A", "E", "F", "B", "C", "D"},
 		},
 	}
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
+			assert := assert.New(t)
 			output := runBinary(t, ctx, tc.caseFile)
-			t.Error(output)
-			// TODO:
+			assert.Equal(tc.output, output)
 		})
 	}
 }
 
+func getReusableContainer(b *testing.B, ctx context.Context, caseName string, containerName string) testcontainers.Container {
+	request := testcontainers.ContainerRequest{
+		Name: containerName,
+		FromDockerfile: testcontainers.FromDockerfile{
+			Context:       *DockerContext,
+			Dockerfile:    *Dockerfile,
+			PrintBuildLog: true,
+		},
+		Files: []testcontainers.ContainerFile{
+			{
+				HostFilePath:      fmt.Sprintf("cases/%s.txt", caseName),
+				ContainerFilePath: "/usr/src/app/input.txt",
+				FileMode:          0444,
+			},
+		},
+		WaitingFor: wait.ForExit().WithExitTimeout(time.Minute * 2),
+	}
+	req := testcontainers.GenericContainerRequest{
+		ContainerRequest: request,
+		Started:          true,
+		Reuse:            true,
+	}
+	container, err := testcontainers.GenericContainer(ctx, req)
+	if err != nil {
+		b.Fatalf("unable to start container: %s", err)
+	}
+	return container
+}
+
 func BenchmarkRunner(b *testing.B) {
-	// TODO:
+	ctx := context.Background()
+	caseName := "with_progress"
+	containerName := "reuseable_container"
+	container := getReusableContainer(b, ctx, caseName, containerName)
+	for i := 0; i < b.N; i++ {
+		container.Exec(ctx, []string{"app"})
+	}
+	defer func() {
+		if err := container.Terminate(ctx); err != nil {
+			b.Errorf("failed to terminate container: %s", err)
+		}
+	}()
 }
