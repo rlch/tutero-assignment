@@ -1,5 +1,5 @@
 
-strict graph with_progress {
+strict digraph with_progress {
 
 	// Node definitions.
 
@@ -16,10 +16,10 @@ strict graph with_progress {
 
 	// Edge definitions.
 
-	"A(0.00)" -- "E(0.70)";
+	"A(0.00)" -> "E(0.70)";
 
-	"B(0.50)" -- "D(0.00)";
+	"B(0.50)" -> "D(0.00)";
 
-	"E(0.70)" -- "D(0.00)";
+	"E(0.70)" -> "D(0.00)";
 
 }

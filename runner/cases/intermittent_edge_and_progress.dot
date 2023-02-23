@@ -1,5 +1,5 @@
 
-strict graph intermittent_edge_and_progress {
+strict digraph intermittent_edge_and_progress {
 
 	// Node definitions.
 
@@ -14,8 +14,8 @@ strict graph intermittent_edge_and_progress {
 
 	// Edge definitions.
 
-	"A(0.60)" -- "C(0.20)";
+	"A(0.60)" -> "C(0.20)";
 
-	"B(0.10)" -- "D(0.80)";
+	"B(0.10)" -> "D(0.80)";
 
 }
