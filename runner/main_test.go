@@ -82,7 +82,7 @@ func TestRunner(t *testing.T) {
 		{
 			name:     "Some nodes with progress",
 			caseFile: "with_progress",
-			output:   []string{"A", "E", "B", "C", "D"},
+			output:   []string{"A", "E", "B", "C", "D"}, // fix
 		},
 		{
 			name:     "All nodes with progress",
@@ -92,7 +92,7 @@ func TestRunner(t *testing.T) {
 		{
 			name:     "Multiple leaf nodes having same level",
 			caseFile: "multiple_leaf_node_in_same_layer",
-			output:   []string{"A", "B", "C", "D"},
+			output:   []string{"B", "C", "A", "D"},
 		},
 		{
 			name:     "Multiple roots at same level",

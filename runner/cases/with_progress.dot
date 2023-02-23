@@ -16,7 +16,11 @@ strict digraph with_progress {
 
 	// Edge definitions.
 
+	"A(0.00)" -> "B(0.50)";
+
 	"A(0.00)" -> "E(0.70)";
+
+	"B(0.50)" -> "C(0.00)";
 
 	"B(0.50)" -> "D(0.00)";
 
