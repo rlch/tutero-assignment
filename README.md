@@ -4,6 +4,8 @@
 
 ![template](.github/template.png)
 
+Write your source-code in the root of your created repository.
+
 ## Context
 
 In this assignment, you will be responsible for providing a learning roadmap for a student named Randy in a topic of mathematics. You are given:
