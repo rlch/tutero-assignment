@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"math/rand"
+	"os"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -144,4 +147,54 @@ func TestRunner(t *testing.T) {
 			assert.Equal(tc.output, result.output)
 		})
 	}
+}
+
+func BenchmarkRunner(t *testing.B) {
+	t.StopTimer()
+	numNodes := t.N
+	numEdges := numNodes / 2
+	var (
+		buf   strings.Builder
+		nodes []string
+
+		curNode = "A"
+	)
+	for i := 0; i < numNodes; i++ {
+		nodes = append(nodes, curNode)
+		progress := rand.Float64()
+		buf.WriteString(
+			curNode + "=" + strconv.FormatFloat(progress, 'f', 1, 64) + "\n",
+		)
+		curNode = incrementID(curNode)
+	}
+	for i := 0; i < numEdges; i++ {
+		ri := rand.Intn(numNodes - 1)
+		// ri + (n > 0) enforces acyclicity as adjacency matrix will be lower
+		// triangular
+		rj := ri + 1 + rand.Intn(numNodes-ri-1)
+		ni := nodes[ri]
+		nj := nodes[rj]
+		buf.WriteString(ni + "->" + nj + "\n")
+	}
+	err := os.WriteFile("cases/benchmark.txt", []byte(buf.String()), 0644)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove("cases/benchmark.txt")
+	t.StartTimer()
+	if _, err := runBinary(context.Background(), "benchmark"); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func incrementID(id string) string {
+	for c := len(id) - 1; c >= 0; c-- {
+		char := id[c]
+		if char == 'Z' {
+			continue
+		}
+		char += 1
+		return id[:c] + string(char) + strings.Repeat("A", len(id)-c-1)
+	}
+	return strings.Repeat("A", len(id)+1)
 }

@@ -60,6 +60,7 @@ stateDiagram-v2
 Your job is to make an executable binary that prints the linear ordering to standard output.
 
 This binary should read from a file `input.txt` which will be mounted to the current runtime path of the binary. You should provide a `Dockerfile` that runs this binary, assuming `/usr/src/app` as the working directory. (this means that the `input.txt` will be mounted to `/usr/src/app/input.txt`). You may find an example of this setup in `build-example/` -- feel free to use the `Dockerfile` provided if you are using Go.
+
 - If you're not familiar with Docker, trying building off an example from [here](https://github.com/gauthamp10/dockerfile-boilerplates) for instance, ensuring that `WORKDIR` is `/usr/src/app`.
 
 The structure of `input.txt` is the a list of the following components (in any order) separated by a newline:
@@ -98,6 +99,7 @@ C
 ---
 
 ## Submission
+
 - Create a template from this repository
 - Version control your assignment on **GitHub**
 - Give access to [@rlch](https://github.com/rlch)
@@ -109,5 +111,7 @@ C
 ## Tips + Notes
 
 - Use the provided test-runner at `runner/` to verify and benchmark your submission.
+  - You can run the tests via `go test ./...`
+  - You can run the benchmarks for a million nodes via `go test -bench=. -benchtime=1000000x`
 - Try your best to use your initiative, but if you have any issues please contact [richard@tutero.com.au](mailto:richard@tutero.com.au)
 - We will set up an interview with you after your assignment is complete to go over your code and ask you various questions about your assignment.
