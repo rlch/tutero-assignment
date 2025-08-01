@@ -115,8 +115,8 @@ Flutter web frontend is required. The provided skeleton includes Ferry GraphQL c
 
 ## Documentation
 
-- [BACKEND.md](BACKEND.md) - Skeleton overview and development tips
-- [FRONTEND.md](FRONTEND.md) - Skeleton overview and development tips
+- [backend/README.md](backend/README.md) - Backend development guide
+- [frontend/README.md](frontend/README.md) - Frontend development guide
 
 ## References
 

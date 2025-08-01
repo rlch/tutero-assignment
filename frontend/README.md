@@ -1,16 +1,57 @@
-# frontend
+# Frontend Development Guide
 
-A new Flutter project.
+Flutter web app skeleton with Ferry GraphQL client. Implement circuit editor interface.
 
-## Getting Started
+## What's Provided
 
-This project is a starting point for a Flutter application.
+- Flutter app with Material 3 theme
+- Ferry GraphQL client with code generation
+- Basic GraphQL operations and sample UI
+- Task automation
 
-A few resources to get you started if this is your first Flutter project:
+**Missing:** Circuit editor UI, canvas-based drag-and-drop interface, component palette, circuit visualization.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Project Structure
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+frontend/
+├── lib/
+│   ├── main.dart                    # App entry point
+│   ├── graphql_client.dart          # Ferry client setup
+│   ├── test_query.dart              # Sample GraphQL integration
+│   ├── src/graphql/                 # GraphQL operations
+│   │   ├── circuits.graphql         # Circuit queries
+│   │   ├── mutations.graphql        # Circuit mutations
+│   │   └── __generated__/           # Generated Ferry code
+│   └── schema.graphql               # Backend schema copy
+└── Taskfile.yml                     # Build automation
+```
+
+## Development Setup
+
+```bash
+flutter pub get      # Install dependencies
+task dev             # Run Flutter web app
+task generate        # Generate GraphQL code from schema
+```
+
+## Ferry GraphQL Integration
+
+Client configured in `lib/graphql_client.dart`. Ferry generates type-safe Dart code from `.graphql` files.
+
+Sample usage in `lib/test_query.dart`:
+```dart
+Operation(
+  client: client,
+  operationRequest: GGetCircuitsReq(),
+  builder: (context, response, error) {
+    // Handle loading, error, and data states
+  },
+)
+```
+
+Run `task generate` after modifying `.graphql` files to update generated code.
+
+## References
+
+- [Ferry GraphQL Client](https://ferrygraphql.com/)

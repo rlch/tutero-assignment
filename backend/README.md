@@ -8,6 +8,9 @@ Go GraphQL skeleton with gqlgen. Implement service layer and circuit evaluation 
 - Server setup
 - Service interfaces for all required operations
 - Entity models and gqlgen configuration
+- Task automation with hot reload
+
+**Missing:** Service implementations, database layer, circuit evaluation logic.
 
 ## Technology Choice
 
