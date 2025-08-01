@@ -37,7 +37,8 @@ flowchart LR
 
 _Project skeleton and boilerplate provided. Core implementation to be completed by developer._
 
-> [!IMPORTANT] > **Getting Started:** Use this repository as a template to create your own assignment repository before beginning development.
+> [!IMPORTANT]
+> **Getting Started:** Use this repository as a template to create your own assignment repository before beginning development.
 
 ## Quick Start
 
@@ -60,16 +61,18 @@ cd frontend && task dev  # Opens in Chrome
 
 ### Core Features to Implement
 
-> [!WARNING] > **Backend Requirements:**
->
+> [!WARNING]
+> **Backend Requirements:**
+> 
 > 1. **Circuit Evaluation Engine** - Boolean logic evaluation algorithm
 > 2. **Service Layer Implementation** - Implement business logic in provided service interfaces
 > 3. **Database Integration** - Add persistence layer
 > 4. **GraphQL Resolvers** - Complete resolver implementations for all schema operations
 > 5. **Validation & Error Handling** - Circuit validation and proper error responses
 
-> [!WARNING] > **Frontend Requirements:**
->
+> [!WARNING]
+> **Frontend Requirements:**
+> 
 > 1. **Circuit Editor UI** - Canvas-based drag-and-drop interface (primary challenge)
 > 2. **Component Palette** - Draggable logic gates (AND, OR, NOT) and I/O nodes
 > 3. **GraphQL Integration** - Wire up mutations for circuit creation/editing
@@ -95,8 +98,9 @@ cd frontend && task dev  # Opens in Chrome
 **Frontend Requirement:**
 Flutter web frontend is required. The provided skeleton includes Ferry GraphQL client setup.
 
-> [!IMPORTANT] > **Implementation Guidelines:**
->
+> [!IMPORTANT]
+> **Implementation Guidelines:**
+> 
 > - **Use Standard Libraries** - Prefer built-in language features and standard libraries over external dependencies
 > - **Showcase Your Skills** - Avoid third-party packages that would solve core challenges (circuit evaluation, UI interactions)
 > - **Flutter Widgets** - Leverage advanced widgets like `CustomPainter`, `MultiChildRenderObject` for custom UI
