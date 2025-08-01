@@ -45,7 +45,7 @@ _Project skeleton and boilerplate provided. Core implementation to be completed 
 ### Prerequisites
 
 - Go 1.21+, Flutter 3.8.1+
-- Task runner: `go install github.com/go-task/task/v3/cmd/task@latest`
+- Task runner: [Installation guide](https://taskfile.dev/installation/)
 
 ### Setup
 
